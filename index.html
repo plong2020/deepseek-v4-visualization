@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepSeek-V4 技术报告作者全景图谱</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+
+        :root {
+            --bg-primary: #FAFAF8;
+            --bg-secondary: #F2F0EB;
+            --text-primary: #2C2C2C;
+            --text-secondary: #6B6B6B;
+            --text-light: #9B9B9B;
+            --accent: #8B9DAE;
+            --accent-light: #B8C5D0;
+            --border: #E0DCD5;
+            --morandi-1: #9B8B7A;
+            --morandi-2: #A8B5A0;
+            --morandi-3: #B5A99A;
+            --morandi-4: #8FA3A0;
+            --morandi-5: #C4B8AA;
+            --morandi-6: #7A8B8A;
+            --morandi-7: #B8A99A;
+            --morandi-8: #A0ADA8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.8;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 100px 0 60px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .hero-tag {
+            display: inline-block;
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 3px;
+            color: var(--accent);
+            text-transform: uppercase;
+            margin-bottom: 24px;
+            padding: 6px 16px;
+            border: 1px solid var(--accent-light);
+            border-radius: 20px;
+        }
+
+        .hero h1 {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 42px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+
+        .hero-subtitle {
+            font-size: 16px;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        .hero-meta {
+            margin-top: 40px;
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            text-align: center;
+        }
+
+        .meta-number {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--morandi-1);
+        }
+
+        .meta-label {
+            font-size: 13px;
+            color: var(--text-light);
+            margin-top: 4px;
+            letter-spacing: 1px;
+        }
+
+        /* Section Styles */
+        .section {
+            padding: 80px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section-header {
+            margin-bottom: 48px;
+        }
+
+        .section-number {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--accent);
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+        }
+
+        .section-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+
+        .section-desc {
+            font-size: 15px;
+            color: var(--text-secondary);
+            max-width: 700px;
+            line-height: 1.8;
+        }
+
+        /* Chart Containers */
+        .chart-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            margin-top: 40px;
+        }
+
+        .chart-full {
+            grid-column: 1 / -1;
+        }
+
+        .chart-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.03);
+            border: 1px solid var(--border);
+        }
+
+        .chart-card h3 {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .chart-card .chart-subtitle {
+            font-size: 13px;
+            color: var(--text-light);
+            margin-bottom: 24px;
+        }
+
+        .chart-container {
+            width: 100%;
+            height: 320px;
+        }
+
+        .chart-container-large {
+            width: 100%;
+            height: 420px;
+        }
+
+        /* Key Findings */
+        .findings-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 40px;
+        }
+
+        .finding-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.03);
+            border: 1px solid var(--border);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .finding-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.06);
+        }
+
+        .finding-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .finding-card h4 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+        }
+
+        .finding-card p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* Profile Cards */
+        .profile-section {
+            margin-top: 40px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .profile-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid var(--border);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .profile-card:hover {
+            border-color: var(--accent-light);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        .profile-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--morandi-4), var(--morandi-2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+            margin: 0 auto 16px;
+        }
+
+        .profile-name-en {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .profile-name-cn {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .profile-tag {
+            display: inline-block;
+            font-size: 11px;
+            padding: 3px 10px;
+            border-radius: 10px;
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .profile-citations {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--morandi-1);
+        }
+
+        .profile-citations-label {
+            font-size: 11px;
+            color: var(--text-light);
+        }
+
+        /* Timeline */
+        .timeline {
+            margin-top: 40px;
+            position: relative;
+        }
+
+        .timeline-item {
+            display: flex;
+            margin-bottom: 32px;
+        }
+
+        .timeline-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--morandi-4);
+            margin-right: 20px;
+            margin-top: 6px;
+            flex-shrink: 0;
+        }
+
+        .timeline-content h4 {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+
+        .timeline-content p {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* Footer */
+        .footer {
+            padding: 60px 0;
+            text-align: center;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer p {
+            font-size: 13px;
+            color: var(--text-light);
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .chart-grid {
+                grid-template-columns: 1fr;
+            }
+            .findings-grid {
+                grid-template-columns: 1fr;
+            }
+            .profile-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .hero h1 {
+                font-size: 32px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 0 20px;
+            }
+            .profile-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-tag">数据可视化 · 2026.04</div>
+            <h1>DeepSeek-V4 技术报告作者全景图谱</h1>
+            <p class="hero-subtitle">
+                深度解析 317 位作者的教育背景、职业履历与研究方向，<br>
+                还原中国大模型领域最具竞争力的研发团队全貌
+            </p>
+            <div class="hero-meta">
+                <div class="meta-item">
+                    <div class="meta-number">317</div>
+                    <div class="meta-label">作者总数</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-number">270</div>
+                    <div class="meta-label">研发工程师</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-number">35+</div>
+                    <div class="meta-label">已详细验证</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-number">10</div>
+                    <div class="meta-label">已离职成员</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 1: 验证状态分布 -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-number">01</div>
+                <h2 class="section-title">信息公开程度</h2>
+                <p class="section-desc">
+                    在 317 位作者中，仅约 11% 的核心成员拥有较为完整的公开背景信息，
+                    其余成员因使用缩写或公开资料有限而难以追溯
+                </p>
+            </div>
+            <div class="chart-grid">
+                <div class="chart-card">
+                    <h3>验证状态分布</h3>
+                    <div class="chart-subtitle">基于公开网络信息的可验证程度</div>
+                    <div id="chart-verification" class="chart-container"></div>
+                </div>
+                <div class="chart-card">
+                    <h3>团队结构</h3>
+                    <div class="chart-subtitle">Research & Engineering 与 Business & Compliance 比例</div>
+                    <div id="chart-team" class="chart-container"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 2: 核心发现 -->
+    <section class="section" style="background: var(--bg-secondary);">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-number">02</div>
+                <h2 class="section-title">核心发现</h2>
+                <p class="section-desc">
+                    通过对已验证成员的深度分析，我们发现 DeepSeek 团队呈现出四大鲜明特征
+                </p>
+            </div>
+            <div class="findings-grid">
+                <div class="finding-card">
+                    <div class="finding-icon" style="background: linear-gradient(135deg, #9B8B7A20, #9B8B7A10); color: #9B8B7A;">🎓</div>
+                    <h4>顶尖高校汇聚</h4>
+                    <p>北大、清华、北航、上交等名校毕业生占主导，其中北京大学人数最多，覆盖 NLP、代码、架构等核心方向</p>
+                </div>
+                <div class="finding-card">
+                    <div class="finding-icon" style="background: linear-gradient(135deg, #A8B5A020, #A8B5A010); color: #A8B5A0;">👶</div>
+                    <h4>年轻化核心层</h4>
+                    <p>大量 95 后、00 后研究员担任核心角色。郭达雅 1994 年生，邵智宏入选 TR35，团队平均年龄极低</p>
+                </div>
+                <div class="finding-card">
+                    <div class="finding-icon" style="background: linear-gradient(135deg, #8FA3A020, #8FA3A010); color: #8FA3A0;">🔬</div>
+                    <h4>MSRA 基因深厚</h4>
+                    <p>郭达雅、杨德建、邵智宏、吴俣等多位核心成员来自微软亚洲研究院，延续了中国 NLP 研究的传统优势</p>
+                </div>
+                <div class="finding-card">
+                    <div class="finding-icon" style="background: linear-gradient(135deg, #B5A99A20, #B5A99A10); color: #B5A99A;">🔄</div>
+                    <h4>人才流动加速</h4>
+                    <p>已有多位核心成员离职，流向字节跳动（郭达雅）、赴港科大读博（李俊龙）等，人才竞争日趋激烈</p>
+                </div>
+                <div class="finding-card">
+                    <div class="finding-icon" style="background: linear-gradient(135deg, #7A8B8A20, #7A8B8A10); color: #7A8B8A;">⚡</div>
+                    <h4>跨界创新力量</h4>
+                    <p>北大物理系的高华佐、量化投资背景的梁文锋等非传统 AI 背景人才，为团队带来独特技术视角</p>
+                </div>
+                <div class="finding-card">
+                    <div class="finding-icon" style="background: linear-gradient(135deg, #C4B8AA20, #C4B8AA10); color: #C4B8AA;">🏆</div>
+                    <h4>学术影响力突出</h4>
+                    <p>多位核心成员 Google Scholar 引用超 2 万次，解振达引用超 3 万次，多篇论文发表于 Nature、CVPR 等顶刊顶会</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: 教育背景 -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-number">03</div>
+                <h2 class="section-title">教育背景</h2>
+                <p class="section-desc">
+                    已验证成员中，北京大学占据绝对主导地位，清华、北航紧随其后
+                </p>
+            </div>
+            <div class="chart-grid">
+                <div class="chart-card">
+                    <h3>高校分布</h3>
+                    <div class="chart-subtitle">已验证核心成员的教育背景</div>
+                    <div id="chart-education" class="chart-container"></div>
+                </div>
+                <div class="chart-card">
+                    <h3>前雇主分布</h3>
+                    <div class="chart-subtitle">核心成员加入 DeepSeek 前的工作经历</div>
+                    <div id="chart-employer" class="chart-container"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 4: 研究方向 -->
+    <section class="section" style="background: var(--bg-secondary);">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-number">04</div>
+                <h2 class="section-title">研究方向</h2>
+                <p class="section-desc">
+                    DeepSeek 的研发力量覆盖从大模型架构、推理增强到代码智能、多模态理解的完整技术栈
+                </p>
+            </div>
+            <div class="chart-card chart-full" style="background: #fff;">
+                <h3>技术方向分布</h3>
+                <div class="chart-subtitle">核心贡献者按研究方向分类</div>
+                <div id="chart-research" class="chart-container-large"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 5: 学术影响力 -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-number">05</div>
+                <h2 class="section-title">学术影响力</h2>
+                <p class="section-desc">
+                    核心成员的 Google Scholar 引用量分布，反映其学术贡献与行业影响力
+                </p>
+            </div>
+            <div class="chart-card chart-full">
+                <h3>核心成员引用量排名</h3>
+                <div class="chart-subtitle">Google Scholar 总引用次数（截至 2025 年）</div>
+                <div id="chart-citations" class="chart-container-large"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 6: 核心成员档案 -->
+    <section class="section" style="background: var(--bg-secondary);">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-number">06</div>
+                <h2 class="section-title">核心成员档案</h2>
+                <p class="section-desc">
+                    八位学术影响力最高的核心成员简介
+                </p>
+            </div>
+            <div class="profile-grid">
+                <div class="profile-card">
+                    <div class="profile-avatar" style="background: linear-gradient(135deg, #9B8B7A, #B5A99A);">解</div>
+                    <div class="profile-name-en">Zhenda Xie</div>
+                    <div class="profile-name-cn">解振达</div>
+                    <div class="profile-tag">清华大学 · 视觉Transformer</div>
+                    <div class="profile-citations">30,000+</div>
+                    <div class="profile-citations-label">Google Scholar 引用</div>
+                </div>
+                <div class="profile-card">
+                    <div class="profile-avatar" style="background: linear-gradient(135deg, #A8B5A0, #8FA3A0);">代</div>
+                    <div class="profile-name-en">Damai Dai</div>
+                    <div class="profile-name-cn">代达劢</div>
+                    <div class="profile-tag">北京大学 · MoE架构</div>
+                    <div class="profile-citations">29,000+</div>
+                    <div class="profile-citations-label">Google Scholar 引用</div>
+                </div>
+                <div class="profile-card">
+                    <div class="profile-avatar" style="background: linear-gradient(135deg, #8FA3A0, #A8B5A0);">许</div>
+                    <div class="profile-name-en">Runxin Xu</div>
+                    <div class="profile-name-cn">许润昕</div>
+                    <div class="profile-tag">北京大学 · 推理增强</div>
+                    <div class="profile-citations">28,000+</div>
+                    <div class="profile-citations-label">Google Scholar 引用</div>
+                </div>
+                <div class="profile-card">
+                    <div class="profile-avatar" style="background: linear-gradient(135deg, #B5A99A, #9B8B7A);">王</div>
+                    <div class="profile-name-en">Peiyi Wang</div>
+                    <div class="profile-name-cn">王培毅</div>
+                    <div class="profile-tag">北京大学 · 对齐推理</div>
+                    <div class="profile-citations">28,000+</div>
+                    <div class="profile-citations-label">Google Scholar 引用</div>
+                </div>
+                <div class="profile-card">
+                    <div class="profile-avatar" style="background: linear-gradient(135deg, #7A8B8A, #8FA3A0);">邵</div>
+                    <div class="profile-name-en">Zhihong Shao</div>
+                    <div class="profile-name-cn">邵智宏</div>
+                    <div class="profile-tag">清华大学 · 数学推理</div>
+                    <div class="profile-citations">28,000+</div>
+                    <div class="profile-citations-label">Google Scholar 引用</div>
+                </div>
+                <div class="profile-card">
+                    <div class="profile-avatar" style="background: linear-gradient(135deg, #C4B8AA, #B5A99A);">毕</div>
+                    <div class="profile-name-en">Xiao Bi</div>
+                    <div class="profile-name-cn">毕晓</div>
+                    <div class="profile-tag">北京大学 · 系统架构</div>
+                    <div class="profile-citations">26,000+</div>
+                    <div class="profile-citations-label">Google Scholar 引用</div>
+                </div>
+                <div class="profile-card">
+                    <div class="profile-avatar" style="background: linear-gradient(135deg, #9B8B7A, #7A8B8A);">郭</div>
+                    <div class="profile-name-en">Daya Guo*</div>
+                    <div class="profile-name-cn">郭达雅</div>
+                    <div class="profile-tag">中山大学 · 代码智能</div>
+                    <div class="profile-citations">39,000+</div>
+                    <div class="profile-citations-label">Google Scholar 引用</div>
+                </div>
+                <div class="profile-card">
+                    <div class="profile-avatar" style="background: linear-gradient(135deg, #A8B5A0, #C4B8AA);">李</div>
+                    <div class="profile-name-en">Yukun Li</div>
+                    <div class="profile-name-cn">李宇琨</div>
+                    <div class="profile-tag">百度 · 多模态NLP</div>
+                    <div class="profile-citations">23,000+</div>
+                    <div class="profile-citations-label">Google Scholar 引用</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 7: 离职成员 -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-number">07</div>
+                <h2 class="section-title">人才流动</h2>
+                <p class="section-desc">
+                    技术报告中标注已离职的 10 位成员，部分核心人才已流向竞争对手
+                </p>
+            </div>
+            <div class="chart-grid">
+                <div class="chart-card">
+                    <h3>已离职成员去向</h3>
+                    <div class="chart-subtitle">标注 * 的 10 位作者离职情况</div>
+                    <div id="chart-departure" class="chart-container"></div>
+                </div>
+                <div class="chart-card">
+                    <h3>离职时间线</h3>
+                    <div class="chart-subtitle">已确认离职成员的关键节点</div>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-content">
+                                <h4>郭达雅（Daya Guo）→ 字节跳动</h4>
+                                <p>DeepSeek 核心研究员，CodeBERT 共同一作，加入字节 Seed 团队任 agent 方向负责人</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-content">
+                                <h4>李俊龙（Junlong Li）→ 港科大读博</h4>
+                                <p>交大 IEEE 荣誉班本科/硕士，赴香港科技大学攻读博士学位</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-content">
+                                <h4>王炳宣（Bingxuan Wang）</h4>
+                                <p>北大元培学院，参与 DeepSeek LLM v1 起全部重要工作，去向未确认</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-content">
+                                <h4>张浩威（Haowei Zhang）</h4>
+                                <p>DeepSeek-R1 核心作者，Nature 封面论文作者，去向未确认</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>
+                数据来源：Google Scholar、OpenReview、百度百科、澎湃新闻、量子位等公开渠道<br>
+                生成时间：2026 年 4 月 27 日 · 未确认信息已如实标注 · 仅供参考
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Color palette - Morandi
+        const morandiColors = [
+            '#9B8B7A', '#A8B5A0', '#8FA3A0', '#B5A99A',
+            '#7A8B8A', '#C4B8AA', '#A0ADA8', '#B8A99A'
+        ];
+
+        // Chart 1: Verification Status
+        const chartVerification = echarts.init(document.getElementById('chart-verification'));
+        chartVerification.setOption({
+            tooltip: { trigger: 'item', formatter: '{b}: {c}人 ({d}%)' },
+            series: [{
+                type: 'pie',
+                radius: ['45%', '70%'],
+                center: ['50%', '50%'],
+                avoidLabelOverlap: true,
+                itemStyle: { borderRadius: 8, borderColor: '#fff', borderWidth: 3 },
+                label: { show: true, fontSize: 13, fontWeight: 500, formatter: '{b}\n{d}%' },
+                labelLine: { show: true, length: 15, length2: 10 },
+                data: [
+                    { value: 35, name: '已详细验证', itemStyle: { color: '#9B8B7A' } },
+                    { value: 50, name: '部分验证', itemStyle: { color: '#A8B5A0' } },
+                    { value: 232, name: '未确认', itemStyle: { color: '#D5CFC7' } }
+                ]
+            }]
+        });
+
+        // Chart 2: Team Structure
+        const chartTeam = echarts.init(document.getElementById('chart-team'));
+        chartTeam.setOption({
+            tooltip: { trigger: 'item', formatter: '{b}: {c}人 ({d}%)' },
+            series: [{
+                type: 'pie',
+                radius: ['0%', '70%'],
+                center: ['50%', '50%'],
+                itemStyle: { borderRadius: 8, borderColor: '#fff', borderWidth: 3 },
+                label: { show: true, fontSize: 13, fontWeight: 500, formatter: '{b}\n{d}%' },
+                data: [
+                    { value: 270, name: 'Research & Engineering', itemStyle: { color: '#8FA3A0' } },
+                    { value: 47, name: 'Business & Compliance', itemStyle: { color: '#C4B8AA' } }
+                ]
+            }]
+        });
+
+        // Chart 3: Education Background
+        const chartEducation = echarts.init(document.getElementById('chart-education'));
+        chartEducation.setOption({
+            tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+            grid: { left: '3%', right: '15%', bottom: '3%', top: '3%', containLabel: true },
+            xAxis: { type: 'value', show: false },
+            yAxis: {
+                type: 'category',
+                data: ['浙江大学', '中山大学', '香港科大', '上海交大', '北航', '清华', '北大'],
+                axisLine: { show: false },
+                axisTick: { show: false },
+                axisLabel: { fontSize: 13, color: '#2C2C2C', fontWeight: 500 }
+            },
+            series: [{
+                type: 'bar',
+                data: [
+                    { value: 1, itemStyle: { color: '#D5CFC7', borderRadius: [0, 6, 6, 0] } },
+                    { value: 1, itemStyle: { color: '#C4B8AA', borderRadius: [0, 6, 6, 0] } },
+                    { value: 2, itemStyle: { color: '#B5A99A', borderRadius: [0, 6, 6, 0] } },
+                    { value: 2, itemStyle: { color: '#A8B5A0', borderRadius: [0, 6, 6, 0] } },
+                    { value: 3, itemStyle: { color: '#9B8B7A', borderRadius: [0, 6, 6, 0] } },
+                    { value: 3, itemStyle: { color: '#8FA3A0', borderRadius: [0, 6, 6, 0] } },
+                    { value: 8, itemStyle: { color: '#7A8B8A', borderRadius: [0, 6, 6, 0] } }
+                ],
+                barWidth: 24,
+                label: { show: true, position: 'right', fontSize: 13, fontWeight: 600, color: '#2C2C2C', formatter: '{c}人' }
+            }]
+        });
+
+        // Chart 4: Previous Employers
+        const chartEmployer = echarts.init(document.getElementById('chart-employer'));
+        chartEmployer.setOption({
+            tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+            grid: { left: '3%', right: '15%', bottom: '3%', top: '3%', containLabel: true },
+            xAxis: { type: 'value', show: false },
+            yAxis: {
+                type: 'category',
+                data: ['字节跳动', '阿里巴巴', '腾讯/微信AI', '百度', '微软MSRA'],
+                axisLine: { show: false },
+                axisTick: { show: false },
+                axisLabel: { fontSize: 13, color: '#2C2C2C', fontWeight: 500 }
+            },
+            series: [{
+                type: 'bar',
+                data: [
+                    { value: 1, itemStyle: { color: '#D5CFC7', borderRadius: [0, 6, 6, 0] } },
+                    { value: 1, itemStyle: { color: '#C4B8AA', borderRadius: [0, 6, 6, 0] } },
+                    { value: 1, itemStyle: { color: '#B5A99A', borderRadius: [0, 6, 6, 0] } },
+                    { value: 1, itemStyle: { color: '#A8B5A0', borderRadius: [0, 6, 6, 0] } },
+                    { value: 4, itemStyle: { color: '#9B8B7A', borderRadius: [0, 6, 6, 0] } }
+                ],
+                barWidth: 24,
+                label: { show: true, position: 'right', fontSize: 13, fontWeight: 600, color: '#2C2C2C', formatter: '{c}人' }
+            }]
+        });
+
+        // Chart 5: Research Directions
+        const chartResearch = echarts.init(document.getElementById('chart-research'));
+        chartResearch.setOption({
+            tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+            grid: { left: '3%', right: '8%', bottom: '8%', top: '8%', containLabel: true },
+            xAxis: {
+                type: 'category',
+                data: ['架构创新', '推理与RL', '代码智能', '多模态', '后训练/对齐', '系统/工程'],
+                axisLine: { lineStyle: { color: '#E0DCD5' } },
+                axisTick: { show: false },
+                axisLabel: { fontSize: 13, color: '#6B6B6B', fontWeight: 500 }
+            },
+            yAxis: {
+                type: 'value',
+                axisLine: { show: false },
+                axisTick: { show: false },
+                splitLine: { lineStyle: { color: '#F2F0EB', type: 'dashed' } },
+                axisLabel: { fontSize: 12, color: '#9B9B9B' }
+            },
+            series: [{
+                type: 'bar',
+                data: [
+                    { value: 3, itemStyle: { color: '#9B8B7A', borderRadius: [6, 6, 0, 0] } },
+                    { value: 4, itemStyle: { color: '#A8B5A0', borderRadius: [6, 6, 0, 0] } },
+                    { value: 3, itemStyle: { color: '#8FA3A0', borderRadius: [6, 6, 0, 0] } },
+                    { value: 2, itemStyle: { color: '#B5A99A', borderRadius: [6, 6, 0, 0] } },
+                    { value: 3, itemStyle: { color: '#7A8B8A', borderRadius: [6, 6, 0, 0] } },
+                    { value: 2, itemStyle: { color: '#C4B8AA', borderRadius: [6, 6, 0, 0] } }
+                ],
+                barWidth: 48,
+                label: { show: true, position: 'top', fontSize: 14, fontWeight: 600, color: '#2C2C2C', formatter: '{c}人' }
+            }]
+        });
+
+        // Chart 6: Citations Ranking
+        const chartCitations = echarts.init(document.getElementById('chart-citations'));
+        chartCitations.setOption({
+            tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, formatter: function(params) { return params[0].name + '<br/>引用量: ' + params[0].value.toLocaleString(); } },
+            grid: { left: '3%', right: '8%', bottom: '3%', top: '3%', containLabel: true },
+            xAxis: {
+                type: 'value',
+                axisLine: { show: false },
+                axisTick: { show: false },
+                splitLine: { lineStyle: { color: '#F2F0EB', type: 'dashed' } },
+                axisLabel: { fontSize: 12, color: '#9B9B9B', formatter: function(v) { return v >= 1000 ? (v/1000) + 'k' : v; } }
+            },
+            yAxis: {
+                type: 'category',
+                data: ['李宇琨', '毕晓', '邵智宏', '王培毅', '许润昕', '解振达', '代达劢', '郭达雅'],
+                axisLine: { show: false },
+                axisTick: { show: false },
+                axisLabel: { fontSize: 13, color: '#2C2C2C', fontWeight: 500 }
+            },
+            series: [{
+                type: 'bar',
+                data: [
+                    { value: 23000, itemStyle: { color: '#D5CFC7', borderRadius: [0, 6, 6, 0] } },
+                    { value: 26000, itemStyle: { color: '#C4B8AA', borderRadius: [0, 6, 6, 0] } },
+                    { value: 28000, itemStyle: { color: '#B5A99A', borderRadius: [0, 6, 6, 0] } },
+                    { value: 28000, itemStyle: { color: '#A8B5A0', borderRadius: [0, 6, 6, 0] } },
+                    { value: 28000, itemStyle: { color: '#9B8B7A', borderRadius: [0, 6, 6, 0] } },
+                    { value: 30000, itemStyle: { color: '#8FA3A0', borderRadius: [0, 6, 6, 0] } },
+                    { value: 29000, itemStyle: { color: '#7A8B8A', borderRadius: [0, 6, 6, 0] } },
+                    { value: 39744, itemStyle: { color: '#9B8B7A', borderRadius: [0, 6, 6, 0] } }
+                ],
+                barWidth: 28,
+                label: { show: true, position: 'right', fontSize: 13, fontWeight: 600, color: '#2C2C2C', formatter: function(p) { return p.value.toLocaleString(); } }
+            }]
+        });
+
+        // Chart 7: Departure Status
+        const chartDeparture = echarts.init(document.getElementById('chart-departure'));
+        chartDeparture.setOption({
+            tooltip: { trigger: 'item', formatter: '{b}: {c}人 ({d}%)' },
+            series: [{
+                type: 'pie',
+                radius: ['45%', '70%'],
+                center: ['50%', '50%'],
+                avoidLabelOverlap: true,
+                itemStyle: { borderRadius: 8, borderColor: '#fff', borderWidth: 3 },
+                label: { show: true, fontSize: 13, fontWeight: 500, formatter: '{b}\n{d}%' },
+                labelLine: { show: true, length: 15, length2: 10 },
+                data: [
+                    { value: 2, name: '去向已确认', itemStyle: { color: '#A8B5A0' } },
+                    { value: 8, name: '去向未确认', itemStyle: { color: '#D5CFC7' } }
+                ]
+            }]
+        });
+
+        // Responsive
+        window.addEventListener('resize', function() {
+            chartVerification.resize();
+            chartTeam.resize();
+            chartEducation.resize();
+            chartEmployer.resize();
+            chartResearch.resize();
+            chartCitations.resize();
+            chartDeparture.resize();
+        });
+    </script>
+</body>
+</html>
