@@ -277,6 +277,17 @@
             color: var(--text-primary);
         }
 
+        .profile-name-en a {
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .profile-name-en a:hover {
+            color: var(--accent);
+            text-decoration: underline;
+        }
+
         .profile-name-cn {
             font-size: 13px;
             color: var(--text-secondary);
@@ -373,20 +384,201 @@
             .profile-grid {
                 grid-template-columns: 1fr;
             }
-        }
-            .profile-name-en a {
-            color: var(--text-primary);
-            text-decoration: none;
-            transition: color 0.2s ease;
+            .research-members {
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                padding-bottom: 8px;
+                -webkit-overflow-scrolling: touch;
+            }
+            .research-member {
+                flex-shrink: 0;
+            }
         }
 
-        .profile-name-en a:hover {
-            color: var(--accent);
-            text-decoration: underline;
+        /* Partial Verified List */
+        .partial-verified-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .pv-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            background: var(--bg-primary);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .pv-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+            min-width: 180px;
+        }
+
+        .pv-tag {
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 6px;
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+
+        .pv-hint {
+            font-size: 13px;
+            color: var(--text-light);
+            flex: 1;
+        }
+
+        /* Sankey Chart */
+        .sankey-container {
+            width: 100%;
+            height: 400px;
+        }
+
+        /* Research Direction Members Panel */
+        #research-panel, #citation-panel {
+            margin-top: 24px;
+            padding: 20px 24px;
+            background: var(--bg-primary);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            min-height: 80px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        #research-panel.active, #citation-panel.active {
+            opacity: 1;
+        }
+        .research-panel-title {
+            font-size: 13px;
+            color: var(--text-light);
+            margin-bottom: 16px;
+            letter-spacing: 1px;
+        }
+        .research-members {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: center;
+        }
+        .research-member {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            transition: transform 0.2s ease;
+        }
+        .research-member:hover {
+            transform: translateY(-2px);
+        }
+        .research-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 600;
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .research-name {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Citation Detail Panel */
+        .citation-detail {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+        }
+        .citation-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 600;
+            color: #fff;
+            flex-shrink: 0;
+        }
+        .citation-info h4 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+        .citation-info .citation-school {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+        }
+        .citation-info .citation-work {
+            font-size: 13px;
+            color: var(--text-primary);
+            line-height: 1.7;
+        }
+        .citation-info .citation-achievement {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-top: 8px;
+            font-style: italic;
+        }
+
+        /* Loading Screen */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-primary);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+        #loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .loading-text {
+            margin-top: 16px;
+            font-size: 13px;
+            color: var(--text-light);
+            letter-spacing: 2px;
         }
     </style>
 </head>
 <body>
+    <div id="loading-screen">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">数据加载中</div>
+    </div>
 
     <!-- Hero -->
     <section class="hero">
@@ -418,15 +610,15 @@
         </div>
     </section>
 
-    <!-- Section 1: 验证状态分布 -->
+    <!-- Section 1: 团队概览 -->
     <section class="section">
         <div class="container">
             <div class="section-header">
                 <div class="section-number">01</div>
-                <h2 class="section-title">信息公开程度</h2>
+                <h2 class="section-title">团队概览</h2>
                 <p class="section-desc">
-                    在 317 位作者中，仅约 11% 的核心成员拥有较为完整的公开背景信息，
-                    其余成员因使用缩写或公开资料有限而难以追溯
+                    317 位作者构成 DeepSeek 研发团队全貌，从验证状态到团队结构，
+                    呈现这支中国大模型领域最具竞争力团队的基础画像
                 </p>
             </div>
             <div class="chart-grid">
@@ -437,7 +629,7 @@
                 </div>
                 <div class="chart-card">
                     <h3>团队结构</h3>
-                    <div class="chart-subtitle">Research & Engineering 与 Business & Compliance 比例</div>
+                    <div class="chart-subtitle">研发与工程 与 商务与合规 比例</div>
                     <div id="chart-team" class="chart-container"></div>
                 </div>
             </div>
@@ -451,7 +643,7 @@
                 <div class="section-number">02</div>
                 <h2 class="section-title">核心发现</h2>
                 <p class="section-desc">
-                    通过对已验证成员的深度分析，我们发现 DeepSeek 团队呈现出四大鲜明特征
+                    通过对已验证成员的深度分析，我们发现 DeepSeek 团队呈现出六大鲜明特征
                 </p>
             </div>
             <div class="findings-grid">
@@ -489,14 +681,14 @@
         </div>
     </section>
 
-    <!-- Section 3: 教育背景 -->
+    <!-- Section 3: 人才画像 -->
     <section class="section">
         <div class="container">
             <div class="section-header">
                 <div class="section-number">03</div>
-                <h2 class="section-title">教育背景</h2>
+                <h2 class="section-title">人才画像</h2>
                 <p class="section-desc">
-                    已验证成员中，北京大学占据绝对主导地位，清华、北航紧随其后
+                    从教育背景、年龄代际，还原 DeepSeek 团队的人才结构特征
                 </p>
             </div>
             <div class="chart-grid">
@@ -506,120 +698,117 @@
                     <div id="chart-education" class="chart-container"></div>
                 </div>
                 <div class="chart-card">
-                    <h3>前雇主分布</h3>
-                    <div class="chart-subtitle">核心成员加入 DeepSeek 前的工作经历</div>
-                    <div id="chart-employer" class="chart-container"></div>
+                    <h3>年龄代际分布</h3>
+                    <div class="chart-subtitle">基于已验证成员毕业年份推算</div>
+                    <div id="chart-generation" class="chart-container"></div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 4: 技术贡献 -->
+    <section class="section" style="background: var(--bg-secondary);">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-number">04</div>
+                <h2 class="section-title">技术贡献</h2>
+                <p class="section-desc">
+                    从研究方向到论文参与，从学术影响力到核心成员档案，全景呈现 DeepSeek 的技术实力
+                </p>
+            </div>
+            <div class="chart-grid">
+                <div class="chart-card chart-full">
+                    <h3>技术方向分布</h3>
+                    <div class="chart-subtitle">核心贡献者按研究方向分类（鼠标悬停查看成员）</div>
+                    <div id="chart-research" class="chart-container-large"></div>
+                    <div id="research-panel"></div>
+                </div>
+                <div class="chart-card chart-full">
+                    <h3>论文贡献热力图</h3>
+                    <div class="chart-subtitle">核心成员在 DeepSeek 系列论文中的参与情况（基于公开报道整理）</div>
+                    <div id="chart-paper-heatmap" class="chart-container-large"></div>
+                </div>
+                <div class="chart-card chart-full">
+                    <h3>核心成员引用量排名</h3>
+                    <div class="chart-subtitle">Google Scholar 总引用次数（截至 2025 年，点击柱状图查看详情）</div>
+                    <div id="chart-citations" class="chart-container-large"></div>
+                    <div id="citation-panel"></div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Section 4: 研究方向 -->
+    <!-- Section 5: 核心成员档案 -->
     <section class="section" style="background: var(--bg-secondary);">
-        <div class="container">
-            <div class="section-header">
-                <div class="section-number">04</div>
-                <h2 class="section-title">研究方向</h2>
-                <p class="section-desc">
-                    DeepSeek 的研发力量覆盖从大模型架构、推理增强到代码智能、多模态理解的完整技术栈
-                </p>
-            </div>
-            <div class="chart-card chart-full" style="background: #fff;">
-                <h3>技术方向分布</h3>
-                <div class="chart-subtitle">核心贡献者按研究方向分类</div>
-                <div id="chart-research" class="chart-container-large"></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Section 5: 学术影响力 -->
-    <section class="section">
         <div class="container">
             <div class="section-header">
                 <div class="section-number">05</div>
-                <h2 class="section-title">学术影响力</h2>
-                <p class="section-desc">
-                    核心成员的 Google Scholar 引用量分布，反映其学术贡献与行业影响力
-                </p>
-            </div>
-            <div class="chart-card chart-full">
-                <h3>核心成员引用量排名</h3>
-                <div class="chart-subtitle">Google Scholar 总引用次数（截至 2025 年）</div>
-                <div id="chart-citations" class="chart-container-large"></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Section 6: 核心成员档案 -->
-    <section class="section" style="background: var(--bg-secondary);">
-        <div class="container">
-            <div class="section-header">
-                <div class="section-number">06</div>
                 <h2 class="section-title">核心成员档案</h2>
                 <p class="section-desc">
-                    八位学术影响力最高的核心成员简介
+                    八位学术影响力最高的核心成员简介（点击头像查看个人信息）
                 </p>
             </div>
-                        <div class="profile-grid">
+            <div class="profile-grid">
                 <div class="profile-card">
-                    <div class="profile-avatar" style="background: linear-gradient(135deg, #9B8B7A, #B5A99A);">解</div>
-                    <div class="profile-name-en"><a href="https://scholar.google.com/citations?user=0C4cDloAAAAJ" target="_blank" rel="noopener">Zhenda Xie</a></div>
+                    <a class="profile-avatar" href="https://scholar.google.com/citations?user=0C4cDloAAAAJ" target="_blank" rel="noopener" style="background: linear-gradient(135deg, #9B8B7A, #B5A99A); text-decoration: none;">解</a>
+                    <div class="profile-name-en">Zhenda Xie</div>
                     <div class="profile-name-cn">解振达</div>
                     <div class="profile-tag">清华大学 · 视觉Transformer</div>
                     <div class="profile-citations">30,000+</div>
                     <div class="profile-citations-label">Google Scholar 引用</div>
                 </div>
                 <div class="profile-card">
-                    <div class="profile-avatar" style="background: linear-gradient(135deg, #A8B5A0, #8FA3A0);">代</div>
-                    <div class="profile-name-en"><a href="https://openreview.net/profile?id=~Damai_Dai1" target="_blank" rel="noopener">Damai Dai</a></div>
+                    <a class="profile-avatar" href="https://openreview.net/profile?id=~Damai_Dai1" target="_blank" rel="noopener" style="background: linear-gradient(135deg, #A8B5A0, #8FA3A0); text-decoration: none;">代</a>
+                    <div class="profile-name-en">Damai Dai</div>
                     <div class="profile-name-cn">代达劢</div>
                     <div class="profile-tag">北京大学 · MoE架构</div>
                     <div class="profile-citations">29,000+</div>
                     <div class="profile-citations-label">Google Scholar 引用</div>
                 </div>
                 <div class="profile-card">
-                    <div class="profile-avatar" style="background: linear-gradient(135deg, #8FA3A0, #A8B5A0);">许</div>
-                    <div class="profile-name-en"><a href="https://github.com/RunxinXu" target="_blank" rel="noopener">Runxin Xu</a></div>
+                    <a class="profile-avatar" href="https://github.com/RunxinXu" target="_blank" rel="noopener" style="background: linear-gradient(135deg, #8FA3A0, #A8B5A0); text-decoration: none;">许</a>
+                    <div class="profile-name-en">Runxin Xu</div>
                     <div class="profile-name-cn">许润昕</div>
                     <div class="profile-tag">北京大学 · 推理增强</div>
                     <div class="profile-citations">28,000+</div>
                     <div class="profile-citations-label">Google Scholar 引用</div>
                 </div>
                 <div class="profile-card">
-                    <div class="profile-avatar" style="background: linear-gradient(135deg, #B5A99A, #9B8B7A);">王</div>
-                    <div class="profile-name-en"><a href="https://scholar.google.com/citations?user=7cEeYJcAAAAJ" target="_blank" rel="noopener">Peiyi Wang</a></div>
+                    <a class="profile-avatar" href="https://scholar.google.com/citations?user=7cEeYJcAAAAJ" target="_blank" rel="noopener" style="background: linear-gradient(135deg, #B5A99A, #9B8B7A); text-decoration: none;">王</a>
+                    <div class="profile-name-en">Peiyi Wang</div>
                     <div class="profile-name-cn">王培毅</div>
                     <div class="profile-tag">北京大学 · 对齐推理</div>
                     <div class="profile-citations">28,000+</div>
                     <div class="profile-citations-label">Google Scholar 引用</div>
                 </div>
                 <div class="profile-card">
-                    <div class="profile-avatar" style="background: linear-gradient(135deg, #7A8B8A, #8FA3A0);">邵</div>
-                    <div class="profile-name-en"><a href="https://baike.baidu.com/item/%E9%82%B5%E6%99%BA%E5%AE%8F/65716730" target="_blank" rel="noopener">Zhihong Shao</a></div>
+                    <a class="profile-avatar" href="https://baike.baidu.com/item/%E9%82%B5%E6%99%BA%E5%AE%8F/65716730" target="_blank" rel="noopener" style="background: linear-gradient(135deg, #7A8B8A, #8FA3A0); text-decoration: none;">邵</a>
+                    <div class="profile-name-en">Zhihong Shao</div>
                     <div class="profile-name-cn">邵智宏</div>
                     <div class="profile-tag">清华大学 · 数学推理</div>
                     <div class="profile-citations">28,000+</div>
                     <div class="profile-citations-label">Google Scholar 引用</div>
                 </div>
                 <div class="profile-card">
-                    <div class="profile-avatar" style="background: linear-gradient(135deg, #C4B8AA, #B5A99A);">毕</div>
-                    <div class="profile-name-en"><a href="https://scholar.google.com/citations?user=ItLSfhUAAAAJ" target="_blank" rel="noopener">Xiao Bi</a></div>
+                    <a class="profile-avatar" href="https://scholar.google.com/citations?user=ItLSfhUAAAAJ" target="_blank" rel="noopener" style="background: linear-gradient(135deg, #C4B8AA, #B5A99A); text-decoration: none;">毕</a>
+                    <div class="profile-name-en">Xiao Bi</div>
                     <div class="profile-name-cn">毕晓</div>
                     <div class="profile-tag">北京大学 · 系统架构</div>
                     <div class="profile-citations">26,000+</div>
                     <div class="profile-citations-label">Google Scholar 引用</div>
                 </div>
                 <div class="profile-card">
-                    <div class="profile-avatar" style="background: linear-gradient(135deg, #9B8B7A, #7A8B8A);">郭</div>
-                    <div class="profile-name-en"><a href="https://baike.baidu.com/item/%E9%83%AD%E8%BE%BE%E9%9B%85/65739753" target="_blank" rel="noopener">Daya Guo*</a></div>
+                    <a class="profile-avatar" href="https://baike.baidu.com/item/%E9%83%AD%E8%BE%BE%E9%9B%85/65739753" target="_blank" rel="noopener" style="background: linear-gradient(135deg, #9B8B7A, #7A8B8A); text-decoration: none;">郭</a>
+                    <div class="profile-name-en">Daya Guo*</div>
                     <div class="profile-name-cn">郭达雅</div>
                     <div class="profile-tag">中山大学 · 代码智能</div>
                     <div class="profile-citations">39,000+</div>
                     <div class="profile-citations-label">Google Scholar 引用</div>
                 </div>
                 <div class="profile-card">
-                    <div class="profile-avatar" style="background: linear-gradient(135deg, #A8B5A0, #C4B8AA);">李</div>
-                    <div class="profile-name-en"><a href="https://scholar.google.com.hk/citations?user=XhFcVhEAAAAJ" target="_blank" rel="noopener">Yukun Li</a></div>
+                    <a class="profile-avatar" href="https://scholar.google.com.hk/citations?user=XhFcVhEAAAAJ" target="_blank" rel="noopener" style="background: linear-gradient(135deg, #A8B5A0, #C4B8AA); text-decoration: none;">李</a>
+                    <div class="profile-name-en">Yukun Li</div>
                     <div class="profile-name-cn">李宇琨</div>
                     <div class="profile-tag">百度 · 多模态NLP</div>
                     <div class="profile-citations">23,000+</div>
@@ -629,25 +818,30 @@
         </div>
     </section>
 
-    <!-- Section 7: 离职成员 -->
+    <!-- Section 6: 人才流动 -->
     <section class="section">
         <div class="container">
             <div class="section-header">
-                <div class="section-number">07</div>
+                <div class="section-number">06</div>
                 <h2 class="section-title">人才流动</h2>
                 <p class="section-desc">
-                    技术报告中标注已离职的 10 位成员，部分核心人才已流向竞争对手
+                    技术报告中标注已离职的 10 位成员，部分核心人才已流向竞争对手或学术界
                 </p>
             </div>
             <div class="chart-grid">
+                <div class="chart-card chart-full">
+                    <h3>离职成员去向流向</h3>
+                    <div class="chart-subtitle">从 DeepSeek 到下一站的人才流动路径</div>
+                    <div id="chart-sankey" class="sankey-container"></div>
+                </div>
                 <div class="chart-card">
-                    <h3>已离职成员去向</h3>
-                    <div class="chart-subtitle">标注 * 的 10 位作者离职情况</div>
-                    <div id="chart-departure" class="chart-container"></div>
+                    <h3>前雇主分布</h3>
+                    <div class="chart-subtitle">核心成员加入 DeepSeek 前的工作经历（基于已验证成员）</div>
+                    <div id="chart-employer" class="chart-container"></div>
                 </div>
                 <div class="chart-card">
                     <h3>离职时间线</h3>
-                    <div class="chart-subtitle">已确认离职成员的关键节点</div>
+                    <div class="chart-subtitle">已确认离职成员的关键节点（截至 2025 年底）</div>
                     <div class="timeline">
                         <div class="timeline-item">
                             <div class="timeline-dot"></div>
@@ -688,7 +882,8 @@
         <div class="container">
             <p>
                 数据来源：Google Scholar、OpenReview、百度百科、澎湃新闻、量子位等公开渠道<br>
-                生成时间：2026 年 4 月 27 日 · 未确认信息已如实标注 · 仅供参考
+                生成时间：2026 年 4 月 27 日 · 未确认信息已如实标注 · 仅供参考<br>
+                关注微信公众号 @观察者时刻
             </p>
         </div>
     </footer>
@@ -731,13 +926,13 @@
                 itemStyle: { borderRadius: 8, borderColor: '#fff', borderWidth: 3 },
                 label: { show: true, fontSize: 13, fontWeight: 500, formatter: '{b}\n{d}%' },
                 data: [
-                    { value: 270, name: 'Research & Engineering', itemStyle: { color: '#8FA3A0' } },
-                    { value: 47, name: 'Business & Compliance', itemStyle: { color: '#C4B8AA' } }
+                    { value: 270, name: '研发与工程', itemStyle: { color: '#8FA3A0' } },
+                    { value: 47, name: '商务与合规', itemStyle: { color: '#C4B8AA' } }
                 ]
             }]
         });
 
-        // Chart 3: Education Background
+        // Chart 4: Education Background
         const chartEducation = echarts.init(document.getElementById('chart-education'));
         chartEducation.setOption({
             tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
@@ -766,7 +961,33 @@
             }]
         });
 
-        // Chart 4: Previous Employers
+        // Chart 5: Generation Distribution
+        const chartGeneration = echarts.init(document.getElementById('chart-generation'));
+        chartGeneration.setOption({
+            tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+            grid: { left: '3%', right: '15%', bottom: '3%', top: '3%', containLabel: true },
+            xAxis: { type: 'value', show: false },
+            yAxis: {
+                type: 'category',
+                data: ['80后', '90后', '95后', '00后'],
+                axisLine: { show: false },
+                axisTick: { show: false },
+                axisLabel: { fontSize: 13, color: '#2C2C2C', fontWeight: 500 }
+            },
+            series: [{
+                type: 'bar',
+                data: [
+                    { value: 2, itemStyle: { color: '#D5CFC7', borderRadius: [0, 6, 6, 0] } },
+                    { value: 8, itemStyle: { color: '#B5A99A', borderRadius: [0, 6, 6, 0] } },
+                    { value: 18, itemStyle: { color: '#8FA3A0', borderRadius: [0, 6, 6, 0] } },
+                    { value: 5, itemStyle: { color: '#7A8B8A', borderRadius: [0, 6, 6, 0] } }
+                ],
+                barWidth: 28,
+                label: { show: true, position: 'right', fontSize: 13, fontWeight: 600, color: '#2C2C2C', formatter: '{c}人' }
+            }]
+        });
+
+        // Chart 6: Previous Employers
         const chartEmployer = echarts.init(document.getElementById('chart-employer'));
         chartEmployer.setOption({
             tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
@@ -827,6 +1048,77 @@
             }]
         });
 
+        const researchMembers = {
+            '架构创新': [
+                { name: '代达劢', link: 'https://openreview.net/profile?id=~Damai_Dai1', color: '#9B8B7A' },
+                { name: '阮冲', link: null, color: '#A8B5A0' },
+                { name: '高华佐', link: null, color: '#8FA3A0' }
+            ],
+            '推理与RL': [
+                { name: '许润昕', link: 'https://github.com/RunxinXu', color: '#9B8B7A' },
+                { name: '邵智宏', link: 'https://baike.baidu.com/item/%E9%82%B5%E6%99%BA%E5%AE%8F/65716730', color: '#A8B5A0' },
+                { name: '张浩威', link: null, color: '#8FA3A0' },
+                { name: '李俊龙', link: null, color: '#B5A99A' }
+            ],
+            '代码智能': [
+                { name: '郭达雅', link: 'https://baike.baidu.com/item/%E9%83%AD%E8%BE%BE%E9%9B%85/65739753', color: '#9B8B7A' },
+                { name: '杨德建', link: null, color: '#A8B5A0' },
+                { name: '王炳宣', link: null, color: '#8FA3A0' }
+            ],
+            '多模态': [
+                { name: '解振达', link: 'https://scholar.google.com/citations?user=0C4cDloAAAAJ', color: '#9B8B7A' },
+                { name: '魏浩然', link: null, color: '#A8B5A0' }
+            ],
+            '后训练/对齐': [
+                { name: '陈得力', link: null, color: '#9B8B7A' },
+                { name: '王培毅', link: 'https://scholar.google.com/citations?user=7cEeYJcAAAAJ', color: '#A8B5A0' },
+                { name: '李宇琨', link: 'https://scholar.google.com.hk/citations?user=XhFcVhEAAAAJ', color: '#8FA3A0' }
+            ],
+            '系统/工程': [
+                { name: '毕晓', link: 'https://scholar.google.com/citations?user=ItLSfhUAAAAJ', color: '#9B8B7A' },
+                { name: '赵成钢', link: null, color: '#A8B5A0' }
+            ]
+        };
+
+        chartResearch.on('mouseover', function(params) {
+            if (params.componentType === 'series') {
+                const dir = params.name;
+                const members = researchMembers[dir] || [];
+                const panel = document.getElementById('research-panel');
+                let html = '<div class="research-panel-title">' + dir + ' 方向成员</div><div class="research-members">';
+                members.forEach(function(m) {
+                    const avatar = '<div class="research-avatar" style="background: linear-gradient(135deg, ' + m.color + ', ' + m.color + 'cc);">' + m.name.charAt(0) + '</div>';
+                    const label = '<div class="research-name">' + m.name + '</div>';
+                    if (m.link) {
+                        html += '<a class="research-member" href="' + m.link + '" target="_blank" rel="noopener">' + avatar + label + '</a>';
+                    } else {
+                        html += '<div class="research-member" style="cursor: default;">' + avatar + label + '</div>';
+                    }
+                });
+                html += '</div>';
+                panel.innerHTML = html;
+                panel.classList.add('active');
+            }
+        });
+
+        chartResearch.getZr().on('mousemove', function(params) {
+            var pointInPixel = [params.offsetX, params.offsetY];
+            if (!chartResearch.containPixel('grid', pointInPixel)) {
+                document.getElementById('research-panel').classList.remove('active');
+            }
+        });
+
+        const citationDetails = {
+            '李宇琨': { school: '百度 · 多模态NLP', work: 'ERNIE、ERNIE 2.0、ERNIE-Gram、ERNIE-GEN 系列核心作者（百度时期）', achievement: '从百度加入 DeepSeek，主导多模态方向' },
+            '毕晓': { school: '北京大学 · 系统架构', work: 'DeepSeek-V3 技术报告核心作者、Math-Shepherd 核心作者、DeepSeek-R1 作者', achievement: '2025 年世界互联网大会乌镇峰会 DeepSeek 代表发言人' },
+            '邵智宏': { school: '清华大学 · 数学推理', work: 'DeepSeek-R1 核心作者、DeepSeek-Math 核心参与者', achievement: '2024 年度 TR35 中国区入选者' },
+            '王培毅': { school: '北京大学 · 对齐推理', work: 'DeepSeek-V3 技术报告核心作者、DeepSeek-R1 核心作者', achievement: '北大计算语言学研究所，师从穗志方教授' },
+            '许润昕': { school: '北京大学 · 推理增强', work: '深度参与 DeepSeek-R1、V1/V2/V3、Math、Coder、MoE 等系列模型研发', achievement: '曾在字节跳动 AI Lab、阿里巴巴达摩院、Metabit Trading 任职' },
+            '解振达': { school: '清华大学 · 视觉Transformer', work: 'Swin Transformer V2 核心作者、DeepSeek-R1 核心作者、DeepSeek-V3 技术报告作者', achievement: '从计算机视觉跨界到大模型，CVPR 2022 引用 3,700+' },
+            '代达劢': { school: '北京大学 · MoE架构', work: 'DeepSeekMoE 第一作者、参与 DeepSeek LLM v1 到 v3 全程研发', achievement: 'EMNLP 2023 最佳长论文奖、博士学位论文激励计划' },
+            '郭达雅': { school: '中山大学 · 代码智能', work: 'CodeBERT 共同一作、DeepSeek-Coder 系列核心作者、DeepSeek-R1 核心作者', achievement: '2021 年 AI 华人新星百强、2020 年微软学者奖学金' }
+        };
+
         // Chart 6: Citations Ranking
         const chartCitations = echarts.init(document.getElementById('chart-citations'));
         chartCitations.setOption({
@@ -863,24 +1155,91 @@
             }]
         });
 
-        // Chart 7: Departure Status
-        const chartDeparture = echarts.init(document.getElementById('chart-departure'));
-        chartDeparture.setOption({
-            tooltip: { trigger: 'item', formatter: '{b}: {c}人 ({d}%)' },
+        chartCitations.on('click', function(params) {
+            if (params.componentType === 'series') {
+                const name = params.name;
+                const info = citationDetails[name];
+                const panel = document.getElementById('citation-panel');
+                const colors = ['#9B8B7A', '#A8B5A0', '#8FA3A0', '#B5A99A', '#7A8B8A', '#C4B8AA', '#A0ADA8', '#B8A99A'];
+                const color = colors[params.dataIndex % colors.length];
+                let html = '<div class="citation-detail">';
+                html += '<div class="citation-avatar" style="background: linear-gradient(135deg, ' + color + ', ' + color + 'cc);">' + name.charAt(0) + '</div>';
+                html += '<div class="citation-info">';
+                html += '<h4>' + name + '</h4>';
+                html += '<div class="citation-school">' + info.school + '</div>';
+                html += '<div class="citation-work">' + info.work + '</div>';
+                html += '<div class="citation-achievement">' + info.achievement + '</div>';
+                html += '</div></div>';
+                panel.innerHTML = html;
+                panel.classList.add('active');
+            }
+        });
+
+        // Chart 7: Paper Contribution Heatmap
+        const chartPaperHeatmap = echarts.init(document.getElementById('chart-paper-heatmap'));
+        const papers = ['DeepSeekMoE', 'DeepSeek-R1', 'DeepSeek-V3', 'DeepSeek-Coder', 'DeepSeek-Math', 'DeepSeek-VL'];
+        const authors = ['郭达雅', '代达劢', '许润昕', '邵智宏', '解振达', '毕晓', '朱琪豪', '杨德建', '宋俊潇', '高华佐', '曾旺丁', '王培毅', '李宇琨', '吴俣', '陈得力'];
+        const heatmapData = [
+            [0,0,1],[0,1,1],[0,2,1],[0,3,0],[0,4,0],[0,5,0],
+            [1,0,1],[1,1,1],[1,2,1],[1,3,0],[1,4,0],[1,5,0],
+            [2,0,0],[2,1,1],[2,2,1],[2,3,0],[2,4,0],[2,5,0],
+            [3,0,0],[3,1,1],[3,2,0],[3,3,0],[3,4,1],[3,5,0],
+            [4,0,0],[4,1,1],[4,2,1],[4,3,0],[4,4,0],[4,5,1],
+            [5,0,0],[5,1,1],[5,2,1],[5,3,1],[5,4,0],[5,5,0],
+            [6,0,0],[6,1,1],[6,2,0],[6,3,1],[6,4,0],[6,5,0],
+            [7,0,0],[7,1,1],[7,2,0],[7,3,1],[7,4,0],[7,5,0],
+            [8,0,0],[8,1,1],[8,2,1],[8,3,0],[8,4,0],[8,5,0],
+            [9,0,0],[9,1,0],[9,2,1],[9,3,0],[9,4,0],[9,5,0],
+            [10,0,0],[10,1,0],[10,2,1],[10,3,0],[10,4,0],[10,5,0],
+            [11,0,0],[11,1,1],[11,2,1],[11,3,0],[11,4,1],[11,5,0],
+            [12,0,0],[12,1,1],[12,2,1],[12,3,0],[12,4,0],[12,5,1],
+            [13,0,0],[13,1,1],[13,2,0],[13,3,0],[13,4,0],[13,5,0],
+            [14,0,0],[14,1,1],[14,2,1],[14,3,0],[14,4,0],[14,5,0]
+        ];
+        chartPaperHeatmap.setOption({
+            tooltip: { position: 'top', formatter: function(p) { return authors[p.data[0]] + ' - ' + papers[p.data[1]] + '<br/>参与: ' + (p.data[2] ? '是' : '否'); } },
+            grid: { left: '12%', right: '8%', bottom: '15%', top: '5%' },
+            xAxis: { type: 'category', data: papers, splitArea: { show: true }, axisLabel: { fontSize: 12, color: '#6B6B6B', rotate: 15 } },
+            yAxis: { type: 'category', data: authors, splitArea: { show: true }, axisLabel: { fontSize: 12, color: '#2C2C2C' } },
+            visualMap: { min: 0, max: 1, show: true, orient: 'vertical', right: '2%', top: '5%', itemWidth: 16, itemHeight: 16, textStyle: { fontSize: 12, color: '#6B6B6B' }, text: ['参与', '未参与'], inRange: { color: ['#F2F0EB', '#8FA3A0'] } },
+            series: [{ name: '参与', type: 'heatmap', data: heatmapData, label: { show: false }, itemStyle: { borderColor: '#fff', borderWidth: 2 } }]
+        });
+
+        // Chart 8: Sankey - Talent Flow
+        const chartSankey = echarts.init(document.getElementById('chart-sankey'));
+        chartSankey.setOption({
+            tooltip: { trigger: 'item', triggerOn: 'mousemove' },
             series: [{
-                type: 'pie',
-                radius: ['45%', '70%'],
-                center: ['50%', '50%'],
-                avoidLabelOverlap: true,
-                itemStyle: { borderRadius: 8, borderColor: '#fff', borderWidth: 3 },
-                label: { show: true, fontSize: 13, fontWeight: 500, formatter: '{b}\n{d}%' },
-                labelLine: { show: true, length: 15, length2: 10 },
+                type: 'sankey',
+                layout: 'none',
+                emphasis: { focus: 'adjacency' },
+                nodeAlign: 'left',
                 data: [
-                    { value: 2, name: '去向已确认', itemStyle: { color: '#A8B5A0' } },
-                    { value: 8, name: '去向未确认', itemStyle: { color: '#D5CFC7' } }
-                ]
+                    { name: 'DeepSeek', itemStyle: { color: '#8FA3A0' } },
+                    { name: '字节跳动', itemStyle: { color: '#9B8B7A' } },
+                    { name: '学术界', itemStyle: { color: '#A8B5A0' } },
+                    { name: '去向未确认', itemStyle: { color: '#D5CFC7' } },
+                    { name: '郭达雅', itemStyle: { color: '#B5A99A' } },
+                    { name: '李俊龙', itemStyle: { color: '#B5A99A' } },
+                    { name: '其他离职成员', itemStyle: { color: '#C4B8AA' } }
+                ],
+                links: [
+                    { source: 'DeepSeek', target: '郭达雅', value: 1 },
+                    { source: 'DeepSeek', target: '李俊龙', value: 1 },
+                    { source: 'DeepSeek', target: '其他离职成员', value: 8 },
+                    { source: '郭达雅', target: '字节跳动', value: 1 },
+                    { source: '李俊龙', target: '学术界', value: 1 },
+                    { source: '其他离职成员', target: '去向未确认', value: 8 }
+                ],
+                lineStyle: { color: 'source', curveness: 0.5, opacity: 0.4 },
+                label: { fontSize: 13, color: '#2C2C2C' }
             }]
         });
+
+        // Hide loading screen when charts are ready
+        setTimeout(function() {
+            document.getElementById('loading-screen').classList.add('hidden');
+        }, 400);
 
         // Responsive
         window.addEventListener('resize', function() {
@@ -888,9 +1247,11 @@
             chartTeam.resize();
             chartEducation.resize();
             chartEmployer.resize();
+            chartGeneration.resize();
             chartResearch.resize();
+            chartPaperHeatmap.resize();
             chartCitations.resize();
-            chartDeparture.resize();
+            chartSankey.resize();
         });
     </script>
 </body>
